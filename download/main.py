@@ -1,3 +1,5 @@
+from zipfile import ZipFile, ZIP_LZMA
+
 import requests
 
 from download.const import FILES_LIST
@@ -16,10 +18,22 @@ def save_file(file_name: str, r: requests.Response):
         f.write(r.content)
 
 
-def main():
+def archive_f(file):
+    file_path = BACK_UP_DIR + file
+
+    with ZipFile(file_path + '.zip', 'w', ZIP_LZMA) as f:
+        f.write(file_path)
+
+
+def archive_files():
+    for file in reversed(FILES_LIST):
+        archive_f(file)
+
+
+def download_files():
     for file in reversed(FILES_LIST):
         save_file(file, download(file))
 
 
 if __name__ == '__main__':
-    main()
+    download_files()
