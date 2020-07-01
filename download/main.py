@@ -1,4 +1,4 @@
-from zipfile import ZipFile, ZIP_LZMA
+from zipfile import ZipFile, ZIP_LZMA, ZIP_BZIP2
 
 import requests
 
@@ -22,17 +22,19 @@ def archive_f(file):
     file_path = BACK_UP_DIR + file
 
     with ZipFile(file_path + '.zip', 'w', ZIP_LZMA) as f:
-        f.write(file_path)
+        f.write(file_path, file)
 
 
 def archive_files():
     for file in reversed(FILES_LIST):
         archive_f(file)
+        print('archive file:', file)
 
 
 def download_files():
     for file in reversed(FILES_LIST):
         save_file(file, download(file))
+        print('download and save file:', file)
 
 
 if __name__ == '__main__':
